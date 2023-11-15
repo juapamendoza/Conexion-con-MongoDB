@@ -5,7 +5,7 @@ from db.db import connection
 
 app = FastAPI()
 
-@app.get("/userdb/")
+@app.get("/database/")
 async def usersclass():
     users_list = []
     try:
@@ -16,7 +16,7 @@ async def usersclass():
     except:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-@app.get("/userdb/{username}")
+@app.get("/database/{username}")
 async def usersclass(username:str):
     try:
         new_user = user_schema(connection.Computacion.ModelosWEB.find_one({"username":username}))
@@ -24,7 +24,7 @@ async def usersclass(username:str):
     except:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         
-@app.post("/userdb/")
+@app.post("/database/")
 async def usersclass(user:User):
     user_dict = dict (user) #convertir de User a JSON
     del user_dict["id"] #eliminar id
@@ -32,7 +32,7 @@ async def usersclass(user:User):
     new_user = user_schema(connection.Computacion.ModelosWEB.find_one({"_id":id}))
     return User(**new_user)
 
-@app.put("/userdb/{username}", response_model=User)
+@app.put("/database/{username}", response_model=User)
 async def usersclass(user: User, username:str):
     newusername = user.username
     full_name = user.full_name
@@ -54,7 +54,7 @@ async def usersclass(user: User, username:str):
     except:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-@app.delete("/userdb/{username}")
+@app.delete("/database/{username}")
 async def usersclass(username:str):
     try:
         connection.Computacion.ModelosWEB.delete_one({"username":username})
